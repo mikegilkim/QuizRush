@@ -1,115 +1,103 @@
-// app.js
+// Example Room data structure
+let roomData = {
+  roomName: '',
+  topic: '',
+  questionsCount: 0,
+  timer: 5,
+  players: [],
+  currentQuestion: 0,
+  answers: [],
+};
 
-let room = {
-    players: [],
-    topic: '',
-    questions: [],
-    currentQuestion: 0,
-    timer: 5,
-    correctAnswer: '',
-    answersReceived: {},
-    points: {}
-  };
+// Creating a new room
+function createRoom() {
+  const roomName = document.getElementById('roomName').value;
+  const topic = document.getElementById('topic').value;
+  const questionsCount = parseInt(document.getElementById('questionsCount').value);
+  const timer = parseInt(document.getElementById('timer').value);
+
+  roomData.roomName = roomName;
+  roomData.topic = topic;
+  roomData.questionsCount = questionsCount;
+  roomData.timer = timer || 5;
+
+  // Generate room link (mock for now)
+  const roomLink = `https://quizrush.app/room/${roomName}`;
+  document.getElementById('roomLink').innerHTML = `Share this link to join: <a href="${roomLink}" target="_blank">${roomLink}</a>`;
+  document.getElementById('roomLink').classList.remove('hidden');
+
+  // Switch to game screen
+  document.getElementById('startScreen').classList.remove('active');
+  document.getElementById('gameScreen').classList.add('active');
   
-  let playerName = 'Player_' + Math.floor(Math.random() * 1000);
+  // Initialize players array
+  roomData.players.push({ name: 'Player1', points: 0 });
   
-  function createRoom() {
-    const topicInput = document.getElementById('topic').value;
-    const countInput = parseInt(document.getElementById('questionCount').value);
-    const timerInput = parseInt(document.getElementById('timer').value) || 5;
-    
-    if (!topicInput || !countInput) {
-      alert('Please fill all fields');
-      return;
+  // Start the game (AI will generate questions)
+  generateQuestions();
+}
+
+// Simulate AI question generation using Puter.js
+function generateQuestions() {
+  const topic = roomData.topic;
+
+  // Call Puter.js (mock here)
+  puter.ask(`Generate ${roomData.questionsCount} questions about ${topic}`, function(response) {
+    roomData.questions = response.split('\n').slice(0, roomData.questionsCount); 
+    askNextQuestion();
+  });
+}
+
+// Ask the next question
+function askNextQuestion() {
+  if (roomData.currentQuestion < roomData.questionsCount) {
+    const question = roomData.questions[roomData.currentQuestion];
+    document.getElementById('currentQuestion').textContent = question;
+
+    // Start timer for answering
+    startTimer();
+  } else {
+    endGame();
+  }
+}
+
+// Timer for each question
+function startTimer() {
+  let timeLeft = roomData.timer;
+  const timerElement = document.getElementById('timer');
+  const timerInterval = setInterval(function() {
+    timerElement.textContent = `Time left: ${timeLeft}s`;
+    timeLeft--;
+
+    if (timeLeft < 0) {
+      clearInterval(timerInterval);
+      checkAnswer('');
     }
+  }, 1000);
+}
+
+// Submit answer
+function submitAnswer() {
+  const answer = document.getElementById('answerInput').value;
+  checkAnswer(answer);
+}
+
+// Check answer and award points
+function checkAnswer(answer) {
+  const correctAnswer = roomData.questions[roomData.currentQuestion];
   
-    room.topic = topicInput;
-    room.timer = timerInput;
-  
-    Puter.ai.generate(`${countInput} questions about ${room.topic}`).then(res => {
-      room.questions = res.split('\n').filter(q => q.trim() !== '');
-      document.getElementById('gameTopic').innerText = `Topic: ${room.topic}`;
-      startGame();
-    });
-  
-    const link = window.location.href + '?room=' + Math.random().toString(36).substr(2, 9);
-    document.getElementById('roomLink').innerHTML = `Share this link: <br><a href="${link}">${link}</a>`;
+  if (answer.toLowerCase() === correctAnswer.toLowerCase()) {
+    roomData.players[0].points += 10; // First player gets 10 points
   }
-  
-  function startGame() {
-    switchScreen('game');
-    showQuestion();
-  }
-  
-  function showQuestion() {
-    if (room.currentQuestion >= room.questions.length) {
-      return endGame();
-    }
-  
-    document.getElementById('questionArea').innerHTML = `<h3>${room.questions[room.currentQuestion]}</h3>`;
-    document.getElementById('answerInput').value = '';
-    room.correctAnswer = room.questions[room.currentQuestion].split(':')[1]?.trim().toLowerCase() || '';
-  
-    setTimeout(() => {
-      checkAnswers();
-    }, room.timer * 1000);
-  }
-  
-  function submitAnswer() {
-    const answer = document.getElementById('answerInput').value.trim().toLowerCase();
-    if (!room.answersReceived[playerName]) {
-      room.answersReceived[playerName] = answer;
-    }
-  }
-  
-  function checkAnswers() {
-    const players = Object.keys(room.answersReceived);
-    players.forEach(player => {
-      const answer = room.answersReceived[player];
-      if (answer === room.correctAnswer) {
-        const pointsEarned = 10 - players.indexOf(player);
-        room.points[player] = (room.points[player] || 0) + pointsEarned;
-      }
-    });
-  
-    room.currentQuestion++;
-    room.answersReceived = {};
-    updatePlayerList();
-    showQuestion();
-  }
-  
-  function updatePlayerList() {
-    const playersList = document.getElementById('players');
-    playersList.innerHTML = '';
-    for (let player in room.points) {
-      playersList.innerHTML += `<div>${player} - ${room.points[player]} pts</div>`;
-    }
-  }
-  
-  function endGame() {
-    switchScreen('result');
-    const ranking = Object.entries(room.points).sort((a, b) => b[1] - a[1]);
-    const finalRanking = document.getElementById('finalRanking');
-    finalRanking.innerHTML = '';
-    ranking.forEach(([name, score], index) => {
-      if (index === 0) {
-        finalRanking.innerHTML += `<div class="winner">🏆 ${name}: ${score} points - Quiz Overlord! 👑</div>`;
-      } else {
-        finalRanking.innerHTML += `<div>${index + 1}. ${name}: ${score} points</div>`;
-      }
-    });
-  }
-  
-  function restartGame() {
-    window.location.reload();
-  }
-  
-  function switchScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(screen => {
-      screen.classList.remove('active');
-      screen.classList.add('hidden');
-    });
-    document.getElementById(screenId).classList.remove('hidden');
-    document.getElementById(screenId).classList.add('active');
-  }
-  
+  roomData.currentQuestion++;
+  askNextQuestion();
+}
+
+// End the game and show rankings
+function endGame() {
+  const winner = roomData.players[0]; // Simplified; real logic needed for ranking
+  document.getElementById('finalRanking').innerHTML = `${winner.name} scored ${winner.points} points`;
+  document.getElementById('winnerMessage').textContent = `Quiz Overlord! 👑 Scored ${winner.points} points!`;
+  document.getElementById('gameScreen').classList.remove('active');
+  document.getElementById('finalScreen').classList.add('active');
+}
