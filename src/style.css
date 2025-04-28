@@ -1,77 +1,169 @@
+/* Global Styles */
 body {
-  font-family: 'Arial', sans-serif;
-  background: #f2f2f2;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #f9f9f9;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   min-height: 100vh;
 }
 
 #app {
-  width: 90%;
-  max-width: 500px;
-  background: white;
-  padding: 20px;
+  width: 100%;
+  max-width: 450px;
+  background: #fff;
+  padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-.screen {
-  display: none;
+h1 {
+  font-size: 36px;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
-.screen.active {
-  display: block;
+.highlight {
+  color: #4CAF50;
 }
 
-input[type="text"],
-input[type="number"] {
-  width: 90%;
-  padding: 10px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
+.description {
+  font-size: 18px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin: 15px 0;
+  text-align: left;
+}
+
+.input-group label {
+  font-weight: 600;
+  color: #333;
+}
+
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  font-size: 16px;
+  border: 2px solid #ddd;
   border-radius: 5px;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus, input[type="number"]:focus {
+  border-color: #4CAF50;
+  outline: none;
 }
 
 button {
-  background: #4CAF50;
+  background-color: #4CAF50;
   color: white;
-  padding: 10px 20px;
-  margin-top: 10px;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: 600;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  width: 100%;
+  margin-top: 20px;
 }
 
 button:hover {
-  background: #45a049;
+  background-color: #45a049;
 }
 
-#roomLink, #players, #finalRanking {
-  margin-top: 20px;
-}
-
-.correct {
-  color: green;
-  font-weight: bold;
-}
-
-.winner {
-  font-size: 24px;
-  color: gold;
-  margin-top: 20px;
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
 }
 
 .hidden {
   display: none;
 }
 
+.room-link {
+  font-size: 16px;
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.room-link:hover {
+  text-decoration: underline;
+}
+
+/* Game Screen Styles */
+#gameScreen {
+  display: none;
+}
+
+#currentQuestion {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+.timer {
+  font-size: 20px;
+  font-weight: 500;
+  color: #f44336;
+  margin-top: 10px;
+}
+
+.answer-input {
+  width: 80%;
+  padding: 12px;
+  margin-top: 20px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+}
+
+.players {
+  margin-top: 20px;
+  font-size: 18px;
+  text-align: left;
+}
+
+.players .player {
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.players .player span {
+  font-weight: normal;
+  color: #888;
+}
+
+/* Final Screen Styles */
+#finalScreen {
+  display: none;
+}
+
+#winnerMessage {
+  font-size: 24px;
+  font-weight: 700;
+  color: #4CAF50;
+}
+
+#finalRanking {
+  font-size: 18px;
+  margin-top: 20px;
+}
+
 @media (max-width: 600px) {
   #app {
-    padding: 15px;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
   }
 }
