@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QuizRush Game App</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+<div id="app">
+  <div id="home" class="screen active">
+    <h2>Create a Room</h2>
+    <input type="text" id="topic" placeholder="Enter topic (e.g. IT Questions)">
+    <input type="number" id="questionCount" placeholder="Number of questions">
+    <input type="number" id="timer" placeholder="Timer per question (seconds, default 5)">
+    <button onclick="createRoom()">Create Room</button>
+    <div id="roomLink"></div>
+  </div>
+
+  <div id="game" class="screen hidden">
+    <h2 id="gameTopic"></h2>
+    <div id="questionArea"></div>
+    <input type="text" id="answerInput" placeholder="Type your answer...">
+    <button onclick="submitAnswer()">Submit Answer</button>
+    <div id="players"></div>
+  </div>
+
+  <div id="result" class="screen hidden">
+    <h2>Game Over!</h2>
+    <div id="finalRanking"></div>
+    <button onclick="restartGame()">Play Again</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/puter-ai/puter-js/puter.min.js"></script>
+<script src="/src/app.js"></script>
+</body>
+</html>
