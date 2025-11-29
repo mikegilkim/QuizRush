@@ -1,4 +1,4 @@
-# QuizRush: AI-Powered Question & Answer Game 🎮🧠
+# Deprecated | Files removed 🎮🧠
 
 Welcome to **QuizRush**, a fun and interactive AI-powered **Question & Answer Game** where players can challenge each other on any topic. Whether it's general knowledge, IT, sports, or trivia — this game brings the thrill of competition right to your fingertips. 🎉
 
